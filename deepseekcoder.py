@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
 
 app = FastAPI()
 
@@ -14,6 +15,7 @@ app.add_middleware(
 # Load model and tokenizer once at startup
 tokenizer = AutoTokenizer.from_pretrained("TT5-tee/deepseek-coder", torch_dtype= "auto")
 model = AutoModelForCausalLM.from_pretrained("TT5-tee/deepseek-coder")
+model = PeftModel.from_pretrained(base_model, "TT5-tee/deepseek-coder")
 
 
 @app.websocket("/ws/opt")
